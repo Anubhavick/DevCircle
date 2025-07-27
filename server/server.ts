@@ -1,28 +1,20 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import cors from 'cors';
-
+import * as dotenv from "dotenv";
 dotenv.config();
 
-if (!process.env.MONGO_URI) {
-  console.error('FATAL ERROR: MONGO_URI is not defined in the environment variables.');
-  process.exit(1);
-}
+import initApp from "./app";
+import initDB from "./config/db.config";
 
-const app = express();
-const PORT: number = parseInt(process.env.PORT || '5000', 10);
+const PORT = process.env.PORT || 1011;
 
-app.use(cors());
-app.use(express.json());
-
-app.get('/', (req, res) => {
-  res.send(' DevCircle Backend is running!');
-});
-
-mongoose.connect(process.env.MONGO_URI) 
-.then(() => {
-  console.log(' MongoDB Connected');
-  app.listen(PORT, () => console.log(` Server running on http://localhost:${PORT}`));
-})
-.catch((error) => console.error(' MongoDB Error:', error));
+const startServer = async () => {
+  try {
+    await initDB();
+    const app = initApp();
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.log("Server Start Error", error);
+  }
+};
+startServer();
