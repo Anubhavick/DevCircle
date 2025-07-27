@@ -1,17 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es2021",
-    "module": "commonjs",
-    "lib": ["esnext"],
-    "allowJs": true,
+    "target": "ES2020",
+    "module": "CommonJS",
+    "rootDir": "./",
+    "outDir": "dist",
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true,
-    "rootDir": "./",             /* ROOT IS NOW THE 'server' FOLDER ITSELF */
-    "outDir": "./dist",
-    "resolveJsonModule": true
+    "skipLibCheck": true
   },
-  "include": ["./*.ts"],       /* INCLUDE .ts FILES DIRECTLY IN THE 'server' FOLDER */
+  "include": ["**/*.ts"],
   "exclude": ["node_modules"]
 }

@@ -4,17 +4,19 @@ dotenv.config();
 import initApp from "./app";
 import initDB from "./config/db.config";
 
-const PORT = process.env.PORT || 1011;
+const PORT = process.env.PORT || 4000;
 
 const startServer = async () => {
   try {
-    await initDB();
+    await initDB(); // dummy DB connection
     const app = initApp();
+
     app.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT}`);
+      console.log(`✅ Server running at http://localhost:${PORT}`);
     });
-  } catch (error) {
-    console.log("Server Start Error", error);
+  } catch (err) {
+    console.error("❌ Server start error:", err);
   }
 };
+
 startServer();

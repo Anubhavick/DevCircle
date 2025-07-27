@@ -1,25 +1,17 @@
+import express, { Router } from "express";
 import cors from "cors";
-import express from "express";
-
-
-
 
 const initApp = () => {
-  try {
-    const app = express();
+  const app = express();
 
-    // Middleware
-    app.use(cors());
-    app.use(express.json());
+  app.use(cors());
+  app.use(express.json());
 
-    // Routes
+  app.get("/", (req, res) => {
+  res.send("Home route working!");
+});
 
-
-    return app;
-  } catch (err) {
-    console.log("App initialization error:", err);
-    throw err;
-  }
+  return app;
 };
 
 export default initApp;
