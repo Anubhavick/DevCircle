@@ -59,6 +59,6 @@ DevCircle is fully open-source and designed to be forked and customized for any 
 Want to set up SwapUp for your college?  
 Have suggestions or ideas?
 
-Feel free to open an issue, submit a PR, or reach out on [Discord/Email/Your Preferred Channel].
+Feel free to open an issue, submit a PR, or reach out on [Discord/Email/Your Preferred Channel]
 
 ---
