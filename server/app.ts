@@ -16,7 +16,7 @@ const initApp = () => {
   app.post("/test", (req, res) => {
     res.json({ message: "POST received", body: req.body });
   });
-
+//ok
   // Mount user routes (empty for now)
   const userRoutes = require("./routes/userRoutes").default || require("./routes/userRoutes");
   app.use("/api/users", userRoutes);
