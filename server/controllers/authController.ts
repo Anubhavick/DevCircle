@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 import axios from "axios";
 import userService from "../services/userService";
+import type { StringValue } from "ms";
 
 // GitHub OAuth callback handler
 export const githubCallback = async (req: Request, res: Response) => {
@@ -58,14 +59,23 @@ export const githubCallback = async (req: Request, res: Response) => {
     }
 
     // Generate JWT token
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      throw new Error("JWT_SECRET is not defined in environment variables");
+    }
+
+    const signOptions: SignOptions = {
+      expiresIn: (process.env.JWT_EXPIRES_IN || "7d") as StringValue
+    };
+
     const token = jwt.sign(
       {
         id: user._id,
         email: user.email,
         username: user.username,
       },
-      process.env.JWT_SECRET!,
-      { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
+      jwtSecret,
+      signOptions
     );
 
     // Redirect to frontend with token
@@ -92,7 +102,12 @@ export const verifyToken = async (req: Request, res: Response) => {
       return res.status(401).json({ error: "No token provided" });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      return res.status(500).json({ error: "Server configuration error" });
+    }
+
+    const decoded = jwt.verify(token, jwtSecret) as {
       id: string;
       email: string;
       username: string;
