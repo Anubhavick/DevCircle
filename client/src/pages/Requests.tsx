@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import { Request as RequestType, RequestType as ReqType } from '../types';
@@ -18,11 +18,7 @@ const Requests: React.FC = () => {
     helpCredits: 5,
   });
 
-  useEffect(() => {
-    fetchRequests();
-  }, []);
-
-  const fetchRequests = async () => {
+  const fetchRequests = useCallback(async () => {
     try {
       const response = await api.get(`/requests/open?college=${user?.college}`);
       setRequests(response.data);
@@ -31,7 +27,11 @@ const Requests: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.college]);
+
+  useEffect(() => {
+    fetchRequests();
+  }, [fetchRequests]);
 
   const handleCreateRequest = async (e: React.FormEvent) => {
     e.preventDefault();
