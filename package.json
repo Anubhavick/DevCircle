@@ -1,0 +1,36 @@
+{
+  "name": "devcircle",
+  "version": "1.0.0",
+  "description": "Mutual Growth Platform for College Coders",
+  "scripts": {
+    "setup": "bash setup.sh",
+    "install:all": "npm install --prefix server && npm install --prefix client",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm start",
+    "build:server": "cd server && npm run build",
+    "build:client": "cd client && npm run build",
+    "build:all": "npm run build:server && npm run build:client",
+    "start:server": "cd server && npm start",
+    "docker:up": "docker-compose up --build",
+    "docker:down": "docker-compose down",
+    "docker:clean": "docker-compose down -v"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/DevCircle.git"
+  },
+  "keywords": [
+    "college",
+    "developers",
+    "community",
+    "peer-to-peer",
+    "help",
+    "open-source"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: devcircle-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: devcircle_password_change_in_production
+      MONGO_INITDB_DATABASE: devcircle
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - devcircle-network
+
+  # Backend API Server
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: devcircle-server
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      MONGODB_URI: mongodb://admin:devcircle_password_change_in_production@mongodb:27017/devcircle?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: 7d
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      GITHUB_CALLBACK_URL: ${GITHUB_CALLBACK_URL}
+      CLIENT_URL: ${CLIENT_URL}
+      COLLEGE_DOMAIN: ${COLLEGE_DOMAIN}
+      COLLEGE_ID: ${COLLEGE_ID}
+    depends_on:
+      - mongodb
+    networks:
+      - devcircle-network
+
+  # Frontend React Application
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: devcircle-client
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      REACT_APP_API_URL: http://localhost:4000/api
+      REACT_APP_GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      REACT_APP_COLLEGE_NAME: ${COLLEGE_NAME}
+      REACT_APP_COLLEGE_ID: ${COLLEGE_ID}
+    depends_on:
+      - server
+    networks:
+      - devcircle-network
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  devcircle-network:
+    driver: bridge
